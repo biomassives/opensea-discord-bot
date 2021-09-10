@@ -59,7 +59,7 @@ async function main() {
     "https://api.opensea.io/api/v1/events?" + params).then((resp) => resp.json());
     
   return await Promise.all(
-    openSeaResponse?.asset_events?.reverse().map(async (sale: any) => {
+    openSeaResponse?.asset_events?.reverse().filter((sale: any) => parseFloat(ethers.utils.formatEther(sale.total_price || '0')) > 0.48).map(async (sale: any) => {
       const message = buildMessage(sale);
       return channel.send(message)
     })
